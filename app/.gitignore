@@ -1,1 +1,4 @@
 /build
+native-lib.cpp
+CMakeLists.txt
+Keys.kt
