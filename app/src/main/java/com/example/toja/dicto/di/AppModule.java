@@ -1,25 +1,26 @@
 package com.example.toja.dicto.di;
 
+import android.app.Application;
+
+import androidx.room.Room;
+
 import com.example.toja.dicto.network.WordsApi;
+import com.example.toja.dicto.persistance.TranslationDatabase;
+import com.example.toja.dicto.persistance.TranslationsDao;
 import com.example.toja.dicto.utils.Keys;
-
-import org.jetbrains.annotations.NotNull;
-
-import java.io.IOException;
 
 import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import okhttp3.Response;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import static com.example.toja.dicto.persistance.TranslationDatabase.DATABASE_NAME;
 import static com.example.toja.dicto.utils.Constants.WORDS_API_BASE_URL;
 import static com.example.toja.dicto.utils.Constants.X_RAPIDAPI_HOST;
 import static com.example.toja.dicto.utils.Constants.X_RAPIDAPI_HOST_VALUE;
@@ -29,6 +30,22 @@ import static com.example.toja.dicto.utils.Constants.X_RAPIDAPI_KEY;
 public abstract class AppModule {
 
     private static final String TAG = "AppModule";
+
+    @Singleton
+    @Provides
+    static TranslationDatabase provideTranslationDatabase(Application application) {
+        return Room.databaseBuilder(
+                application,
+                TranslationDatabase.class,
+                DATABASE_NAME
+        ).build();
+    }
+
+    @Singleton
+    @Provides
+    static TranslationsDao provideTranslationsDao(TranslationDatabase translationDatabase) {
+        return translationDatabase.getTranslationsDao();
+    }
 
     @Singleton
     @Provides
