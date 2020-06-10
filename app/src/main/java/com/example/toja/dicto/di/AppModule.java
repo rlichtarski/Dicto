@@ -7,6 +7,7 @@ import androidx.room.Room;
 import com.example.toja.dicto.network.WordsApi;
 import com.example.toja.dicto.persistance.TranslationDatabase;
 import com.example.toja.dicto.persistance.TranslationsDao;
+import com.example.toja.dicto.repositories.TranslationRepository;
 import com.example.toja.dicto.utils.Keys;
 
 import javax.inject.Singleton;
@@ -49,6 +50,12 @@ public abstract class AppModule {
 
     @Singleton
     @Provides
+    static TranslationRepository provideTranslationRepository(TranslationsDao translationsDao, WordsApi wordsApi) {
+        return new TranslationRepository(translationsDao, wordsApi);
+    }
+
+    @Singleton
+    @Provides
     static Retrofit provideRetrofitInstance() {
 
         HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
@@ -80,5 +87,7 @@ public abstract class AppModule {
     static WordsApi provideWordsApi(Retrofit retrofit) {
         return retrofit.create(WordsApi.class);
     }
+
+
 
 }

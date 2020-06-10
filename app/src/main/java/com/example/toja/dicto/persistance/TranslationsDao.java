@@ -4,11 +4,16 @@ import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
-import androidx.room.Update;
 
 import com.example.toja.dicto.models.Translation;
 
+import java.util.List;
+
+import io.reactivex.Completable;
+import io.reactivex.Flowable;
 import io.reactivex.Single;
+
+import static androidx.room.OnConflictStrategy.IGNORE;
 
 @Dao
 public interface TranslationsDao {
@@ -16,16 +21,22 @@ public interface TranslationsDao {
     @Insert
     Single<Long> insertTranslation(Translation translation) throws Exception;
 
-    @Update
-    Single<Integer> updateTranslation() throws Exception;
+    @Insert(onConflict = IGNORE)
+    Completable insertTranslationResponse(List<Translation> translations) throws Exception;
+
+    /*@Update
+    Single<Integer> updateTranslation() throws Exception;*/
 
     @Query("DELETE FROM translations WHERE word = :word")
     Single<Integer> deleteTranslation(String word) throws Exception;
 
     @Query("SELECT * FROM translations")
-    LiveData<Translation> getAllTranslations();
+    Flowable<List<Translation>> getAllTranslations();
+
+    @Query("SELECT * FROM translations WHERE word = :word")
+    Single<List<Translation>> getTranslationsForWord(String word);
 
     @Query("SELECT word FROM translations")
-    LiveData<String> getAllTranslationsWords();
+    LiveData<List<String>> getAllTranslationsWordsList();
 
 }

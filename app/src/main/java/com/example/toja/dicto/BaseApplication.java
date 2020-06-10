@@ -1,6 +1,5 @@
 package com.example.toja.dicto;
 
-
 import com.example.toja.dicto.di.DaggerAppComponent;
 
 import dagger.android.AndroidInjector;

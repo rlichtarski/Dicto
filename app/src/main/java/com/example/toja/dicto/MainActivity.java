@@ -3,66 +3,67 @@ package com.example.toja.dicto;
 import android.os.Bundle;
 import android.util.Log;
 
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.LiveDataReactiveStreams;
-import androidx.lifecycle.MediatorLiveData;
-import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.toja.dicto.models.Translation;
-import com.example.toja.dicto.network.WordsApi;
 import com.example.toja.dicto.utils.Resource;
+import com.example.toja.dicto.viewmodels.TranslationViewModel;
+import com.example.toja.dicto.viewmodels.ViewModelProviderFactory;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
 import dagger.android.support.DaggerAppCompatActivity;
-import io.reactivex.functions.Function;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 
 public class MainActivity extends DaggerAppCompatActivity {
 
     private static final String TAG = "MainActivity";
 
-    @Inject
-    WordsApi wordsApi;
+    private CompositeDisposable disposables = new CompositeDisposable();
 
-    private MediatorLiveData<Resource<Translation>> translation;
+    @Inject
+    ViewModelProviderFactory viewModelProviderFactory;
+
+    private TranslationViewModel translationViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        checkApi().observe(this,translationResource -> {
-            if (translationResource != null)
-                switch (translationResource.status) {
-                    case SUCCESS: {
-                        Log.d(TAG,"onChanged: " + translationResource.data.getWord());
-                    }
+        translationViewModel = new ViewModelProvider(this, viewModelProviderFactory).get(TranslationViewModel.class);
+
+        fetchData();
+    }
+
+    private void fetchData() {
+        disposables.add(translationViewModel.getTranslation("conceal")
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe(this::showResults));
+    }
+
+    private void showResults(Resource<List<Translation>> resource) {
+        switch (resource.status) {
+            case LOADING: {
+                Log.d(TAG,"show: LOADING...");
+                break;
+            }
+
+            case ERROR: {
+                Log.e(TAG,"show: ERROR message: " + resource.message);
+                break;
+            }
+
+            case SUCCESS: {
+                for(int i=0; i<resource.data.size(); i++) {
+                    Log.d(TAG,"show: SUCCESS: " + resource.data.get(i).getDefinition() + ", " + resource.message);
                 }
-        });
-    }
-
-    LiveData<Resource<Translation>> checkApi() {
-        if(translation == null) {
-            translation = new MediatorLiveData<>();
-            translation.setValue(Resource.loading(null));
+            }
         }
-
-        LiveData<Resource<Translation>> source = LiveDataReactiveStreams.fromPublisher(wordsApi.getWordTranslation("car")
-                .map((Function<Translation, Resource<Translation>>) translation -> {
-                    if(translation != null) {
-                        return Resource.success(translation);
-                    }
-                    return Resource.error("Something went wrong", null);
-                })
-                .subscribeOn(Schedulers.io())
-        );
-        translation.addSource(source,translationResource -> {
-            translation.setValue(translationResource);
-            translation.removeSource(source);
-        });
-
-        return translation;
     }
-
 }

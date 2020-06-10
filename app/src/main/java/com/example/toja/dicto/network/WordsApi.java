@@ -1,15 +1,17 @@
 package com.example.toja.dicto.network;
 
-import com.example.toja.dicto.models.Translation;
+import com.example.toja.dicto.models.TranslationResponse;
 
-import io.reactivex.Flowable;
+import javax.inject.Singleton;
+
+import io.reactivex.Single;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
-import retrofit2.http.Query;
 
+@Singleton
 public interface WordsApi {
 
     @GET("words/{word}")
-    Flowable<Translation> getWordTranslation(@Path("word") String word);
+    Single<TranslationResponse> getWordTranslation(@Path("word") String word);
 
 }

@@ -20,8 +20,8 @@ public class Resource<T> {
         this.message = message;
     }
 
-    public static <T> Resource<T> success (@Nullable T data) {
-        return new Resource<>(Status.SUCCESS, data, null);
+    public static <T> Resource<T> success (@Nullable T data, String msg) {
+        return new Resource<>(Status.SUCCESS, data, msg);
     }
 
     public static <T> Resource<T> error(@NonNull String msg, @Nullable T data) {

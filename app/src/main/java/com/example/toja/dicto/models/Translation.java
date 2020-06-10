@@ -3,6 +3,7 @@ package com.example.toja.dicto.models;
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.Expose;
@@ -10,65 +11,122 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-@Entity(tableName = "translations")
+@Entity(tableName = "translations", indices = @Index(value = {"definition"}, unique = true))
 public class Translation {
 
     @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "translation_id")
+    @ColumnInfo(name = "word_id")
     @NonNull
-    private int translationId;
-    @SerializedName("word")
+    private int wordId;
+    /*@Embedded
+    private Pronunciation pronunciation;*/
+    @SerializedName("definition")
+    @Expose
+    private String definition;
+    @SerializedName("partOfSpeech")
+    @Expose
+    private String partOfSpeech;
+    @SerializedName("synonyms")
+    @Expose
+    private List<String> synonyms = null;
+    @SerializedName("similarTo")
+    @Expose
+    private List<String> similarTo = null;
+    @SerializedName("examples")
+    @Expose
+    private List<String> examples = null;
     @Expose
     private String word;
-    @SerializedName("results")
-    @Expose
-    private List<Result> results = null;
-    @SerializedName("pronunciation")
-    @Expose
-    private Pronunciation pronunciation;
     @ColumnInfo(name = "timestamp")
     private int timestamp;
 
-    /**
-     * No args constructor for use in serialization
-     *
-     */
-    public Translation() {
-    }
-
-    /**
-     *
-     * @param pronunciation
-     * @param word
-     * @param results
-     */
-    public Translation(String word,List<Result> results,Pronunciation pronunciation) {
-        super();
-        this.word = word;
-        this.results = results;
+    /*public Translation(int wordId,Pronunciation pronunciation,String definition,String partOfSpeech,List<String> synonyms,List<String> similarTo,List<String> examples,String word,int timestamp) {
+        this.wordId = wordId;
         this.pronunciation = pronunciation;
-    }
-
-    public Translation(List<Result> results, String word,Pronunciation pronunciation,int timestamp) {
-        this.results = results;
+        this.definition = definition;
+        this.partOfSpeech = partOfSpeech;
+        this.synonyms = synonyms;
+        this.similarTo = similarTo;
+        this.examples = examples;
         this.word = word;
-        this.pronunciation = pronunciation;
+        this.timestamp = timestamp;
+    }*/
+
+    public Translation(int wordId,String definition,String partOfSpeech,List<String> synonyms,List<String> similarTo,List<String> examples,String word,int timestamp) {
+        this.wordId = wordId;
+        this.definition = definition;
+        this.partOfSpeech = partOfSpeech;
+        this.synonyms = synonyms;
+        this.similarTo = similarTo;
+        this.examples = examples;
+        this.word = word;
         this.timestamp = timestamp;
     }
 
-    public Translation(int translationId,String word,List<Result> results,Pronunciation pronunciation) {
-        this.translationId = translationId;
+    /*public Translation(int wordId,String definition,String partOfSpeech,String word,int timestamp) {
+        this.wordId = wordId;
+        this.definition = definition;
+        this.partOfSpeech = partOfSpeech;
         this.word = word;
-        this.results = results;
-        this.pronunciation = pronunciation;
+        this.timestamp = timestamp;
+    }*/
+
+    public Translation(){}
+
+    public int getWordId() {
+        return wordId;
     }
 
-    public Translation(int translationId,String word,List<Result> results,Pronunciation pronunciation,int timestamp) {
-        this.translationId = translationId;
-        this.word = word;
-        this.results = results;
+    public void setWordId(int wordId) {
+        this.wordId = wordId;
+    }
+
+    /*public Pronunciation getPronunciation() {
+        return pronunciation;
+    }
+
+    public void setPronunciation(Pronunciation pronunciation) {
         this.pronunciation = pronunciation;
-        this.timestamp = timestamp;
+    }*/
+
+    public String getDefinition() {
+        return definition;
+    }
+
+    public void setDefinition(String definition) {
+        this.definition = definition;
+    }
+
+    public String getPartOfSpeech() {
+        return partOfSpeech;
+    }
+
+    public void setPartOfSpeech(String partOfSpeech) {
+        this.partOfSpeech = partOfSpeech;
+    }
+
+    public List<String> getSynonyms() {
+        return synonyms;
+    }
+
+    public void setSynonyms(List<String> synonyms) {
+        this.synonyms = synonyms;
+    }
+
+    public List<String> getSimilarTo() {
+        return similarTo;
+    }
+
+    public void setSimilarTo(List<String> similarTo) {
+        this.similarTo = similarTo;
+    }
+
+    public List<String> getExamples() {
+        return examples;
+    }
+
+    public void setExamples(List<String> examples) {
+        this.examples = examples;
     }
 
     public int getTimestamp() {
@@ -85,29 +143,5 @@ public class Translation {
 
     public void setWord(String word) {
         this.word = word;
-    }
-
-    public List<Result> getResults() {
-        return results;
-    }
-
-    public void setResults(List<Result> results) {
-        this.results = results;
-    }
-
-    public Pronunciation getPronunciation() {
-        return pronunciation;
-    }
-
-    public void setPronunciation(Pronunciation pronunciation) {
-        this.pronunciation = pronunciation;
-    }
-
-    public int getTranslationId() {
-        return translationId;
-    }
-
-    public void setTranslationId(int translationId) {
-        this.translationId = translationId;
     }
 }
