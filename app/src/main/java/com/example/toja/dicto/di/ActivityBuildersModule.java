@@ -1,6 +1,7 @@
 package com.example.toja.dicto.di;
 
 import com.example.toja.dicto.MainActivity;
+import com.example.toja.dicto.di.main.MainFragmentBuildersModule;
 
 import javax.inject.Named;
 
@@ -13,7 +14,9 @@ public abstract class ActivityBuildersModule {
 
     private static final String TAG = "ActivityBuildersModule";
 
-    @ContributesAndroidInjector
+    @ContributesAndroidInjector(
+            modules = {MainFragmentBuildersModule.class}
+    )
     abstract MainActivity contributeMainActivity();
 
 }

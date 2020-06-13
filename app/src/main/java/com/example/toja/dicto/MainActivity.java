@@ -6,6 +6,7 @@ import android.util.Log;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.toja.dicto.models.Translation;
+import com.example.toja.dicto.ui.main.translation.TranslationFragment;
 import com.example.toja.dicto.utils.Resource;
 import com.example.toja.dicto.viewmodels.TranslationViewModel;
 import com.example.toja.dicto.viewmodels.ViewModelProviderFactory;
@@ -38,6 +39,13 @@ public class MainActivity extends DaggerAppCompatActivity {
         translationViewModel = new ViewModelProvider(this, viewModelProviderFactory).get(TranslationViewModel.class);
 
         fetchData();
+        testTranslationFragment();
+    }
+
+    private void testTranslationFragment() {
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.main_container, new TranslationFragment())
+                .commit();
     }
 
     private void fetchData() {
