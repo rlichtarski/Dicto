@@ -44,18 +44,6 @@ public abstract class AppModule {
 
     @Singleton
     @Provides
-    static TranslationsDao provideTranslationsDao(TranslationDatabase translationDatabase) {
-        return translationDatabase.getTranslationsDao();
-    }
-
-    @Singleton
-    @Provides
-    static TranslationRepository provideTranslationRepository(TranslationsDao translationsDao, WordsApi wordsApi) {
-        return new TranslationRepository(translationsDao, wordsApi);
-    }
-
-    @Singleton
-    @Provides
     static Retrofit provideRetrofitInstance() {
 
         HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
@@ -72,6 +60,7 @@ public abstract class AppModule {
                     return chain.proceed(newRequest);
                 })
                 .addInterceptor(loggingInterceptor)
+                .retryOnConnectionFailure(false)
                 .build();
 
         return new Retrofit.Builder()
@@ -81,13 +70,4 @@ public abstract class AppModule {
                 .client(okHttpClient)
                 .build();
     }
-
-    @Singleton
-    @Provides
-    static WordsApi provideWordsApi(Retrofit retrofit) {
-        return retrofit.create(WordsApi.class);
-    }
-
-
-
 }

@@ -1,4 +1,4 @@
-package com.example.toja.dicto.viewmodels;
+package com.example.toja.dicto.ui.main.translation;
 
 import androidx.lifecycle.ViewModel;
 

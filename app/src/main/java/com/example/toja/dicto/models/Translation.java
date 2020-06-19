@@ -34,7 +34,7 @@ public class Translation {
     private List<String> similarTo = null;
     @SerializedName("examples")
     @Expose
-    private List<String> examples = null;
+    private List<String> examples;
     @Expose
     private String word;
     @ColumnInfo(name = "timestamp")

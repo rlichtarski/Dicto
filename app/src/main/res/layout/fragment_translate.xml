@@ -1,38 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
-    <RelativeLayout
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/search_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <androidx.appcompat.widget.SearchView
-            android:id="@+id/search_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="16dp"
-            android:layout_toStartOf="@+id/search_btn"
-            app:queryHint="@string/search"/>
-
-        <ImageView
-            android:id="@+id/search_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignTop="@id/search_view"
-            android:layout_alignBottom="@id/search_view"
-            android:layout_alignParentEnd="true"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginEnd="32dp"
-            android:layout_marginBottom="4dp"
-            android:background="@drawable/baseline_search_black_36" />
-    </RelativeLayout>
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        app:queryHint="@string/search" />
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -42,22 +23,23 @@
             android:id="@+id/word_txt_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textStyle="bold|italic"
-            android:textColor="#000000"
-            android:layout_marginTop="36dp"
             android:layout_marginStart="36dp"
+            android:layout_marginTop="24dp"
             android:layout_marginEnd="36dp"
             android:layout_marginBottom="6dp"
-            android:textSize="24sp"/>
+            android:textColor="#000000"
+            android:textSize="26sp"
+            android:textStyle="bold|italic" />
 
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/translation_recycler_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/word_txt_view"
-            android:layout_marginTop="6dp"
             android:layout_marginStart="36dp"
+            android:layout_marginTop="6dp"
             android:layout_marginEnd="36dp"
-            android:layout_marginBottom="36dp"/>
+            android:layout_marginBottom="36dp" />
 
     </RelativeLayout>
 

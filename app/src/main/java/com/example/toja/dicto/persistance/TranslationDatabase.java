@@ -6,7 +6,7 @@ import androidx.room.TypeConverters;
 
 import com.example.toja.dicto.models.Translation;
 
-@Database(entities = {Translation.class}, version = 2)
+@Database(entities = {Translation.class}, version = 1)
 @TypeConverters({Converters.class})
 public abstract class TranslationDatabase extends RoomDatabase {
 
