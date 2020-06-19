@@ -103,9 +103,9 @@ public class TranslationFragment extends DaggerFragment {
     }
 
     private void initTranslationRecyclerView() {
-        mTranslationRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        VerticalSpaceItemDecoration verticalSpaceItemDecoration = new VerticalSpaceItemDecoration(15);
+        VerticalSpaceItemDecoration verticalSpaceItemDecoration = new VerticalSpaceItemDecoration(30);
         mTranslationRecyclerView.addItemDecoration(verticalSpaceItemDecoration);
+        mTranslationRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mTranslationRecyclerView.setAdapter(translationRecyclerAdapter);
     }
 

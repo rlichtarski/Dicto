@@ -1,35 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical">
+    app:cardElevation="4dp">
 
-    <TextView
-        android:id="@+id/part_of_speech"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="22sp"
-        android:layout_marginBottom="12dp"/>
+        android:layout_margin="4dp"
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/definition_txt_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="4dp"
-        android:textSize="20sp"
-        android:textColor="#262020"/>
+        <TextView
+            android:id="@+id/part_of_speech"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginStart="6dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginEnd="6dp"
+            android:textSize="22sp" />
 
-    <TextView
-        android:id="@+id/examples_txt_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginBottom="16dp"
-        android:textSize="18sp"/>
+        <TextView
+            android:id="@+id/definition_txt_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="4dp"
+            android:textColor="#262020"
+            android:textSize="20sp" />
 
-</LinearLayout>
+        <TextView
+            android:id="@+id/examples_txt_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="8dp"
+            android:textSize="18sp" />
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>
