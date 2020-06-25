@@ -12,6 +12,11 @@ public class TestUtil {
 
     Translation translation = new Translation();
 
-    public static final Translation TEST_TRANSLATION_1 = new Translation(1, "car is car", "noun", "word", 2020);
-
+    public static final List<String> TEST_WORDS_STRING_LIST = Collections.unmodifiableList(
+            new ArrayList<String>(){{
+                add("car");
+                add("apple");
+                add("head");
+            }}
+    );
 }

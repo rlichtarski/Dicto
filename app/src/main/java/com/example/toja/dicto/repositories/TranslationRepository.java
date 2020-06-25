@@ -1,5 +1,11 @@
 package com.example.toja.dicto.repositories;
 
+import android.util.Log;
+
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MediatorLiveData;
+import androidx.lifecycle.Observer;
+
 import com.example.toja.dicto.models.Translation;
 import com.example.toja.dicto.models.TranslationResponse;
 import com.example.toja.dicto.network.WordsApi;
@@ -23,6 +29,9 @@ public class TranslationRepository {
 
     public static final String INSERT_SUCCESS = "Insert success";
     public static final String INSERT_FAILURE = "Insert failure";
+
+    private MediatorLiveData<List<String>> words = new MediatorLiveData<>();
+    private MediatorLiveData<List<Translation>> translations = new MediatorLiveData<>();
 
     private final TranslationsDao translationsDao;
     private final WordsApi wordsApi;
@@ -60,4 +69,11 @@ public class TranslationRepository {
             }
         });
     }
+
+    public LiveData<List<Translation>> getAllTranslations() {
+        LiveData<List<Translation>> source = translationsDao.getAllTranslations();
+        translations.addSource(source,translationsList -> translations.setValue(translationsList));
+        return translations;
+    }
+
 }

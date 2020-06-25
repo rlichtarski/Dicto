@@ -3,6 +3,7 @@ package com.example.toja.dicto.di.main;
 import androidx.lifecycle.ViewModel;
 
 import com.example.toja.dicto.di.ViewModelKey;
+import com.example.toja.dicto.ui.main.history.HistoryViewModel;
 import com.example.toja.dicto.ui.main.translation.TranslationViewModel;
 
 import dagger.Binds;
@@ -16,5 +17,10 @@ public abstract class MainViewModelsModule {
     @IntoMap
     @ViewModelKey(TranslationViewModel.class)
     public abstract ViewModel bindTranslationViewModel(TranslationViewModel translationViewModel);
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(HistoryViewModel.class)
+    public abstract ViewModel bindHistoryViewModel(HistoryViewModel historyViewModel);
 
 }

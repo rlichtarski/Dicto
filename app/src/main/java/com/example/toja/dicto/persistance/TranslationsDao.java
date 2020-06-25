@@ -24,19 +24,13 @@ public interface TranslationsDao {
     @Insert(onConflict = IGNORE)
     Completable insertTranslationResponse(List<Translation> translations) throws Exception;
 
-    /*@Update
-    Single<Integer> updateTranslation() throws Exception;*/
-
     @Query("DELETE FROM translations WHERE word = :word")
     Single<Integer> deleteTranslation(String word) throws Exception;
 
     @Query("SELECT * FROM translations")
-    Flowable<List<Translation>> getAllTranslations();
+    LiveData<List<Translation>> getAllTranslations();
 
     @Query("SELECT * FROM translations WHERE word = :word")
     Single<List<Translation>> getTranslationsForWord(String word);
-
-    @Query("SELECT word FROM translations")
-    LiveData<List<String>> getAllTranslationsWordsList();
 
 }
