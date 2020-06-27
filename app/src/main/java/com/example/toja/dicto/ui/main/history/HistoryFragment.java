@@ -8,16 +8,10 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.toja.dicto.R;
-import com.example.toja.dicto.models.Translation;
-import com.example.toja.dicto.ui.main.translation.TranslationViewModel;
 import com.example.toja.dicto.viewmodels.ViewModelProviderFactory;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
@@ -32,7 +26,7 @@ public class HistoryFragment extends DaggerFragment {
     @Inject
     ViewModelProviderFactory verticalSpaceItemDecoration;
 
-    TextView words;
+    TextView mWordsTextView;
 
     @Nullable
     @Override
@@ -42,8 +36,7 @@ public class HistoryFragment extends DaggerFragment {
 
     @Override
     public void onViewCreated(@NonNull View view,@Nullable Bundle savedInstanceState) {
-        words = view.findViewById(R.id.words_txt);
-
+        mWordsTextView = view.findViewById(R.id.words_txt);
         historyViewModel = new ViewModelProvider(this,verticalSpaceItemDecoration).get(HistoryViewModel.class);
     }
 
@@ -55,12 +48,10 @@ public class HistoryFragment extends DaggerFragment {
 
     public void subscribeObservers() {
         historyViewModel.observeTranslations().observe(this,translations -> {
-            for(Translation translation : translations) {
-                words.append(translation.getWord() + "\n");
+            for(int i=0; i<translations.size(); i++) {
+                mWordsTextView.append(translations.get(i).getWord() + "\n");
             }
         });
-
     }
-
 
 }

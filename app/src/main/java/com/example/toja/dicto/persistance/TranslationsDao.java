@@ -6,6 +6,7 @@ import androidx.room.Insert;
 import androidx.room.Query;
 
 import com.example.toja.dicto.models.Translation;
+import com.example.toja.dicto.models.TranslationResponse;
 
 import java.util.List;
 
@@ -18,19 +19,16 @@ import static androidx.room.OnConflictStrategy.IGNORE;
 @Dao
 public interface TranslationsDao {
 
-    @Insert
-    Single<Long> insertTranslation(Translation translation) throws Exception;
-
     @Insert(onConflict = IGNORE)
-    Completable insertTranslationResponse(List<Translation> translations) throws Exception;
+    Completable insertTranslationResponse(TranslationResponse translationResponse) throws Exception;
 
     @Query("DELETE FROM translations WHERE word = :word")
     Single<Integer> deleteTranslation(String word) throws Exception;
 
     @Query("SELECT * FROM translations")
-    LiveData<List<Translation>> getAllTranslations();
+    LiveData<List<TranslationResponse>> getAllTranslations();
 
     @Query("SELECT * FROM translations WHERE word = :word")
-    Single<List<Translation>> getTranslationsForWord(String word);
+    Single<TranslationResponse> getTranslationsForWord(String word);
 
 }

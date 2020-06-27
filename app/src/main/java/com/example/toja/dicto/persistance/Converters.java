@@ -2,12 +2,14 @@ package com.example.toja.dicto.persistance;
 
 import androidx.room.TypeConverter;
 
+import com.example.toja.dicto.models.Pronunciation;
 import com.example.toja.dicto.models.Translation;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 public class Converters {
@@ -58,6 +60,31 @@ public class Converters {
     public static String translationListToString(List<Translation> translationList) {
         Gson gson = new Gson();
         return gson.toJson(translationList);
+    }
+
+    @TypeConverter
+    public static String toString(Pronunciation pronunciation) {
+        if (pronunciation == null) return null;
+
+        Gson gson = new Gson();
+        return gson.toJson(pronunciation);
+    }
+
+    @TypeConverter
+    public static Date toDate(Long timestamp) {
+        if (timestamp == null) {
+            return null;
+        }
+        return new Date(timestamp);
+    }
+
+    @TypeConverter
+    public static Long toTimestamp(Date date) {
+        if (date == null) {
+            return null;
+        }
+
+        return date.getTime();
     }
 
 }

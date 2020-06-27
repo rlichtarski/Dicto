@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.toja.dicto.R;
 import com.example.toja.dicto.models.Translation;
+import com.example.toja.dicto.models.TranslationResponse;
 import com.example.toja.dicto.utils.Resource;
 import com.example.toja.dicto.utils.VerticalSpaceItemDecoration;
 import com.example.toja.dicto.viewmodels.ViewModelProviderFactory;
@@ -79,33 +80,30 @@ public class TranslationFragment extends DaggerFragment {
                 .subscribe(this::showResults));
     }
 
-    private void showResults(Resource<List<Translation>> resource) {
-        switch (resource.status) {
+    private void showResults(Resource<TranslationResponse> translationResponseResource) {
+        switch (translationResponseResource.status) {
             case LOADING: {
                 Log.d(TAG,"showResults: LOADING...");
                 break;
             }
 
             case ERROR: {
-                Log.e(TAG,"showResults ERROR message: " + resource.message);
+                Log.e(TAG,"showResults ERROR message: " + translationResponseResource.message);
                 break;
             }
 
             case SUCCESS: {
-                for (int i = 0; i < resource.data.size(); i++) {
-                    Log.d(TAG,"showResults SUCCESS: " + resource.data.get(i).getDefinition() + ", " + resource.message);
-                    if(resource.data.get(i).getExamples() != null) {
-                        Log.d(TAG,"showResults SUCCESS string example: " + resource.data.get(i).getExamples().toString() + ", " + resource.message);
-                    }
+                for(int i = 0; i<translationResponseResource.data.getTranslations().size(); i++) {
+                    Log.d(TAG,"showResults: SUCCESS: " + translationResponseResource.data.getTranslations().get(i).getDefinition() + ", " + translationResponseResource.message);
                 }
-                setWidgets(resource.data);
-                translationRecyclerAdapter.setTranslationList(resource.data);
+                setWidgets(translationResponseResource.data);
             }
         }
     }
 
-    private void setWidgets(List<Translation> translations) {
-        mWordTxtView.setText(translations.get(0).getWord());
+    private void setWidgets(TranslationResponse translation) {
+        mWordTxtView.setText(translation.getWord());
+        translationRecyclerAdapter.setTranslationList(translation.getTranslations());
     }
 
     private void initTranslationRecyclerView() {

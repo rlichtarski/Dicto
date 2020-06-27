@@ -1,12 +1,8 @@
 package com.example.toja.dicto.repositories;
 
-import android.util.Log;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
-import androidx.lifecycle.Observer;
 
-import com.example.toja.dicto.models.Translation;
 import com.example.toja.dicto.models.TranslationResponse;
 import com.example.toja.dicto.network.WordsApi;
 import com.example.toja.dicto.persistance.TranslationsDao;
@@ -27,11 +23,7 @@ public class TranslationRepository {
 
     private static final String TAG = "TranslationRepository";
 
-    public static final String INSERT_SUCCESS = "Insert success";
-    public static final String INSERT_FAILURE = "Insert failure";
-
-    private MediatorLiveData<List<String>> words = new MediatorLiveData<>();
-    private MediatorLiveData<List<Translation>> translations = new MediatorLiveData<>();
+    private MediatorLiveData<List<TranslationResponse>> mTranslationResponse = new MediatorLiveData<>();
 
     private final TranslationsDao translationsDao;
     private final WordsApi wordsApi;
@@ -42,8 +34,8 @@ public class TranslationRepository {
         this.wordsApi = wordsApi;
     }
 
-    public Observable<Resource<List<Translation>>> getTranslation(String word) {
-        return Observable.create(emitter -> new NetworkBoundResource<List<Translation>, TranslationResponse>(emitter) {
+    public Observable<Resource<TranslationResponse>> getTranslation(String word) {
+        return Observable.create(emitter -> new NetworkBoundResource<TranslationResponse, TranslationResponse>(emitter) {
             @Override
             protected Single<TranslationResponse> createCall() {
                 return wordsApi.getWordTranslation(word);
@@ -52,11 +44,7 @@ public class TranslationRepository {
             @Override
             protected Completable saveCallResult(TranslationResponse response) {
                 try {
-                    for(int i=0; i<response.getTranslations().size(); i++) {
-                        response.getTranslations().get(i).setWord(word);
-                        response.getTranslations().get(i).setTimestamp((int) (System.currentTimeMillis() / 1000));
-                    }
-                    return translationsDao.insertTranslationResponse(response.getTranslations());
+                    return translationsDao.insertTranslationResponse(response);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -64,16 +52,16 @@ public class TranslationRepository {
             }
 
             @Override
-            protected Single<List<Translation>> loadFromDb() {
+            protected Single<TranslationResponse> loadFromDb() {
                 return translationsDao.getTranslationsForWord(word);
             }
         });
     }
 
-    public LiveData<List<Translation>> getAllTranslations() {
-        LiveData<List<Translation>> source = translationsDao.getAllTranslations();
-        translations.addSource(source,translationsList -> translations.setValue(translationsList));
-        return translations;
+    public LiveData<List<TranslationResponse>> getAllTranslations() {
+        LiveData<List<TranslationResponse>> source = translationsDao.getAllTranslations();
+        mTranslationResponse.addSource(source,translationResponses -> mTranslationResponse.setValue(translationResponses));
+        return mTranslationResponse;
     }
 
 }

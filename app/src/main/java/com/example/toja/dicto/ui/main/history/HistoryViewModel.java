@@ -6,6 +6,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 
 import com.example.toja.dicto.models.Translation;
+import com.example.toja.dicto.models.TranslationResponse;
 import com.example.toja.dicto.repositories.TranslationRepository;
 
 import java.util.ArrayList;
@@ -24,7 +25,7 @@ public class HistoryViewModel extends ViewModel {
         this.translationRepository = translationRepository;
     }
 
-    public LiveData<List<Translation>> observeTranslations() {
+    public LiveData<List<TranslationResponse>> observeTranslations() {
         return translationRepository.getAllTranslations();
     }
 }

@@ -3,6 +3,7 @@ package com.example.toja.dicto.ui.main.translation;
 import androidx.lifecycle.ViewModel;
 
 import com.example.toja.dicto.models.Translation;
+import com.example.toja.dicto.models.TranslationResponse;
 import com.example.toja.dicto.repositories.TranslationRepository;
 import com.example.toja.dicto.utils.Resource;
 
@@ -24,7 +25,7 @@ public class TranslationViewModel extends ViewModel {
         this.translationRepository = translationRepository;
     }
 
-    public Observable<Resource<List<Translation>>> getTranslation(String word) {
+    public Observable<Resource<TranslationResponse>> getTranslation(String word) {
         this.word = word;
         return translationRepository.getTranslation(word);
     }
