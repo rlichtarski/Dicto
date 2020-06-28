@@ -14,12 +14,12 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
-public abstract class NetworkBoundResource<LocalType, RemoteType> {
+public abstract class NetworkBoundResource<Data> {
 
     private CompositeDisposable disposables = new CompositeDisposable();
-    private ObservableEmitter<Resource<LocalType>> emitter;
+    private ObservableEmitter<Resource<Data>> emitter;
 
-    public NetworkBoundResource(ObservableEmitter<Resource<LocalType>> emitter) {
+    public NetworkBoundResource(ObservableEmitter<Resource<Data>> emitter) {
         this.emitter = emitter;
         onStart();
     }
@@ -29,14 +29,14 @@ public abstract class NetworkBoundResource<LocalType, RemoteType> {
         createCall()
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
-                .subscribe(new SingleObserver<RemoteType>() {
+                .subscribe(new SingleObserver<Data>() {
                     @Override
                     public void onSubscribe(Disposable d) {
                         disposables.add(d);
                     }
 
                     @Override
-                    public void onSuccess(RemoteType response) {
+                    public void onSuccess(Data response) {
                         storeThenPass(response);
                     }
 
@@ -47,7 +47,7 @@ public abstract class NetworkBoundResource<LocalType, RemoteType> {
                 });
     }
 
-    private void storeThenPass(RemoteType response) {
+    private void storeThenPass(Data response) {
         disposables.add(
                 saveCallResult(response)
                         .subscribeOn(Schedulers.io())
@@ -56,7 +56,7 @@ public abstract class NetworkBoundResource<LocalType, RemoteType> {
                                 loadFromDb()
                                         .subscribeOn(Schedulers.io())
                                         .observeOn(Schedulers.io())
-                                        .map(localType -> Resource.success(localType,"success fresh data from api"))
+                                        .map(data -> Resource.success(data,"success fresh data from api"))
                                         .subscribe(value -> {
                                             emitter.onNext(value);
                                             onFinished();
@@ -68,14 +68,14 @@ public abstract class NetworkBoundResource<LocalType, RemoteType> {
         loadFromDb()
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
-                .subscribe(new SingleObserver<LocalType>() {
+                .subscribe(new SingleObserver<Data>() {
                     @Override
                     public void onSubscribe(Disposable d) {
                         disposables.add(d);
                     }
 
                     @Override
-                    public void onSuccess(LocalType data) {
+                    public void onSuccess(Data data) {
                         emitter.onNext(isAnEmptyCollection(data) ? Resource.error("missing data", null) : Resource.success(data, "non-fresh data from db"));
                         onFinished();
                     }
@@ -98,12 +98,12 @@ public abstract class NetworkBoundResource<LocalType, RemoteType> {
     }
 
     @MainThread
-    protected abstract Single<RemoteType> createCall();
+    protected abstract Single<Data> createCall();
 
     @WorkerThread
-    protected abstract Completable saveCallResult(RemoteType response);
+    protected abstract Completable saveCallResult(Data response);
 
     @MainThread
-    protected abstract Single<LocalType> loadFromDb();
+    protected abstract Single<Data> loadFromDb();
 
 }

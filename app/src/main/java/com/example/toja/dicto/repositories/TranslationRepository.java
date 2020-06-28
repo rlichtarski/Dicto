@@ -35,7 +35,7 @@ public class TranslationRepository {
     }
 
     public Observable<Resource<TranslationResponse>> getTranslation(String word) {
-        return Observable.create(emitter -> new NetworkBoundResource<TranslationResponse, TranslationResponse>(emitter) {
+        return Observable.create(emitter -> new NetworkBoundResource<TranslationResponse>(emitter) {
             @Override
             protected Single<TranslationResponse> createCall() {
                 return wordsApi.getWordTranslation(word);
