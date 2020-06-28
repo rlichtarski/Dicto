@@ -8,6 +8,7 @@ import com.example.toja.dicto.network.WordsApi;
 import com.example.toja.dicto.persistance.TranslationDatabase;
 import com.example.toja.dicto.persistance.TranslationsDao;
 import com.example.toja.dicto.repositories.TranslationRepository;
+import com.example.toja.dicto.ui.main.history.HistoryRecyclerAdapter;
 import com.example.toja.dicto.ui.main.translation.TranslationRecyclerAdapter;
 import com.example.toja.dicto.utils.VerticalSpaceItemDecoration;
 
@@ -21,6 +22,11 @@ public abstract class MainModule {
     @Provides
     static TranslationRecyclerAdapter provideTranslationRecyclerAdapter() {
         return new TranslationRecyclerAdapter();
+    }
+
+    @Provides
+    static HistoryRecyclerAdapter provideHistoryRecyclerAdapter() {
+        return new HistoryRecyclerAdapter();
     }
 
     @Provides

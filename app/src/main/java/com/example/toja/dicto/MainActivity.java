@@ -21,7 +21,7 @@ public class MainActivity extends DaggerAppCompatActivity {
 
     private void testTranslationFragment() {
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.main_container, new TranslationFragment())
+                .replace(R.id.main_container, new HistoryFragment())
                 .commit();
     }
 
