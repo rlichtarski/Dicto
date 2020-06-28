@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -13,12 +14,14 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.toja.dicto.MainActivity;
 import com.example.toja.dicto.R;
 import com.example.toja.dicto.models.TranslationResponse;
 import com.example.toja.dicto.ui.main.translation.TranslationRecyclerAdapter;
 import com.example.toja.dicto.utils.VerticalSpaceItemDecoration;
 import com.example.toja.dicto.viewmodels.ViewModelProviderFactory;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -45,6 +48,15 @@ public class HistoryFragment extends DaggerFragment {
 
     private RecyclerView mHistoryRecyclerView;
 
+    private List<TranslationResponse> translationResponseList;
+
+    private View.OnClickListener onItemClickListener = view -> {
+        RecyclerView.ViewHolder viewHolder = (RecyclerView.ViewHolder) view.getTag();
+        int position = viewHolder.getAdapterPosition();
+        TranslationResponse translationResponse = translationResponseList.get(position);
+        Toast.makeText(getActivity(), "You clicked: " + translationResponse.getWord(), Toast.LENGTH_SHORT).show();
+    };
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,@Nullable ViewGroup container,@Nullable Bundle savedInstanceState) {
@@ -56,6 +68,8 @@ public class HistoryFragment extends DaggerFragment {
         mHistoryRecyclerView = view.findViewById(R.id.history_recycler_view);
 
         historyViewModel = new ViewModelProvider(this,viewModelProviderFactory).get(HistoryViewModel.class);
+
+        translationResponseList = new ArrayList<>();
 
         initHistoryRecyclerView();
     }
@@ -69,13 +83,7 @@ public class HistoryFragment extends DaggerFragment {
     public void subscribeObservers() {
         historyViewModel.observeTranslations().observe(this,translations -> {
             historyRecyclerAdapter.setTranslationResponseList(translations);
-        });
-
-        historyViewModel.observeTranslations().observe(this,new Observer<List<TranslationResponse>>() {
-            @Override
-            public void onChanged(List<TranslationResponse> translationResponses) {
-
-            }
+            translationResponseList = translations;
         });
     }
 
@@ -83,6 +91,7 @@ public class HistoryFragment extends DaggerFragment {
         mHistoryRecyclerView.addItemDecoration(verticalSpaceItemDecoration);
         mHistoryRecyclerView.setLayoutManager(linearLayoutManager);
         mHistoryRecyclerView.setAdapter(historyRecyclerAdapter);
+        historyRecyclerAdapter.setOnItemClickListener(onItemClickListener);
     }
 
 }
