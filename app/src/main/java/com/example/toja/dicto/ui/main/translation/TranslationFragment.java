@@ -51,9 +51,6 @@ public class TranslationFragment extends DaggerFragment {
     @Inject
     VerticalSpaceItemDecoration verticalSpaceItemDecoration;
 
-    @Inject
-    LinearLayoutManager linearLayoutManager;
-
     private SearchView mSearchView;
     private TextView mWordTxtView;
     private RecyclerView mTranslationRecyclerView;
@@ -130,7 +127,7 @@ public class TranslationFragment extends DaggerFragment {
 
     private void initTranslationRecyclerView() {
         mTranslationRecyclerView.addItemDecoration(verticalSpaceItemDecoration);
-        mTranslationRecyclerView.setLayoutManager(linearLayoutManager);
+        mTranslationRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mTranslationRecyclerView.setAdapter(translationRecyclerAdapter);
     }
 

@@ -3,6 +3,7 @@ package com.example.toja.dicto.di.main;
 import android.app.Application;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.toja.dicto.network.WordsApi;
 import com.example.toja.dicto.persistance.TranslationDatabase;

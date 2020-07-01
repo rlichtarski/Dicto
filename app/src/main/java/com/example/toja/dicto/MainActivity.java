@@ -60,4 +60,9 @@ public class MainActivity extends DaggerAppCompatActivity implements NavigationV
 
         return true;
     }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        return NavigationUI.navigateUp(Navigation.findNavController(this, R.id.nav_host_fragment), drawerLayout);
+    }
 }
