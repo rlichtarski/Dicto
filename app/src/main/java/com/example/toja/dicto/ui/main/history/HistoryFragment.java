@@ -9,6 +9,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -57,9 +58,7 @@ public class HistoryFragment extends DaggerFragment {
         TranslationResponse translationResponse = translationResponseList.get(position);
         sharedViewModel.selectTranslationItem(translationResponse);
         sharedViewModel.setTranslationStateFromHistory();
-        getParentFragmentManager().beginTransaction()
-                .replace(R.id.main_container, new TranslationFragment())
-                .commit();
+        Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.translationScreen);
         Toast.makeText(getActivity(), "You clicked: " + translationResponse.getWord(), Toast.LENGTH_SHORT).show();
     };
 

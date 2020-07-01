@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    app:startDestination="@+id/translationScreen">
+
+    <fragment
+        android:id="@+id/translationScreen"
+        android:name="com.example.toja.dicto.ui.main.translation.TranslationFragment"
+        android:label="@string/translate"
+        tools:layout="@layout/fragment_translate">
+    </fragment>
+
+    <fragment
+        android:id="@+id/historyScreen"
+        android:name="com.example.toja.dicto.ui.main.history.HistoryFragment"
+        android:label="@string/search_history_lower_case"
+        tools:layout="@layout/fragment_history">
+    </fragment>
+
+</navigation>

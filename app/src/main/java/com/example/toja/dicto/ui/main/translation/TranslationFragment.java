@@ -112,11 +112,11 @@ public class TranslationFragment extends DaggerFragment {
             switch (translationState) {
                 case FROM_HISTORY: {
                     sharedViewModel.getSelectedTranslationItem().observe(getActivity(),this::setWidgets);
-                    sharedViewModel.setTranslationStateMain();
                     break;
                 }
 
-                case FROM_MAIN: {
+                default: {
+                    //nothing
                     break;
                 }
             }
