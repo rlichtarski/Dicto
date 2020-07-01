@@ -1,5 +1,7 @@
 package com.example.toja.dicto.ui.main.translation;
 
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.toja.dicto.models.Translation;
@@ -18,7 +20,6 @@ public class TranslationViewModel extends ViewModel {
     private static final String TAG = "TranslationViewModel";
 
     private TranslationRepository translationRepository;
-    private String word;
 
     @Inject
     public TranslationViewModel(TranslationRepository translationRepository) {
@@ -26,7 +27,6 @@ public class TranslationViewModel extends ViewModel {
     }
 
     public Observable<Resource<TranslationResponse>> getTranslation(String word) {
-        this.word = word;
         return translationRepository.getTranslation(word);
     }
 

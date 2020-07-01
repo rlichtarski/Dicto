@@ -6,22 +6,24 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.toja.dicto.R;
-import com.example.toja.dicto.models.Translation;
 import com.example.toja.dicto.models.TranslationResponse;
+import com.example.toja.dicto.ui.main.SharedViewModel;
 import com.example.toja.dicto.utils.Resource;
 import com.example.toja.dicto.utils.VerticalSpaceItemDecoration;
 import com.example.toja.dicto.viewmodels.ViewModelProviderFactory;
 
-import java.util.List;
+import org.jetbrains.annotations.NotNull;
 
 import javax.inject.Inject;
 
@@ -40,6 +42,8 @@ public class TranslationFragment extends DaggerFragment {
     ViewModelProviderFactory viewModelProviderFactory;
 
     private TranslationViewModel translationViewModel;
+
+    private SharedViewModel sharedViewModel;
 
     @Inject
     TranslationRecyclerAdapter translationRecyclerAdapter;
@@ -67,7 +71,9 @@ public class TranslationFragment extends DaggerFragment {
         mSearchView = view.findViewById(R.id.search_view);
 
         translationViewModel = new ViewModelProvider(this,viewModelProviderFactory).get(TranslationViewModel.class);
+        sharedViewModel = new ViewModelProvider(getActivity(),viewModelProviderFactory).get(SharedViewModel.class);
 
+        subscribeSharedViewModel();
         initTranslationRecyclerView();
         initSearchView();
     }
@@ -93,12 +99,28 @@ public class TranslationFragment extends DaggerFragment {
             }
 
             case SUCCESS: {
-                for(int i = 0; i<translationResponseResource.data.getTranslations().size(); i++) {
+                for (int i = 0; i < translationResponseResource.data.getTranslations().size(); i++) {
                     Log.d(TAG,"showResults: SUCCESS: " + translationResponseResource.data.getTranslations().get(i).getDefinition() + ", " + translationResponseResource.message);
                 }
                 setWidgets(translationResponseResource.data);
             }
         }
+    }
+
+    private void subscribeSharedViewModel() {
+        sharedViewModel.getTranslationState().observe(getActivity(),translationState -> {
+            switch (translationState) {
+                case FROM_HISTORY: {
+                    sharedViewModel.getSelectedTranslationItem().observe(getActivity(),this::setWidgets);
+                    sharedViewModel.setTranslationStateMain();
+                    break;
+                }
+
+                case FROM_MAIN: {
+                    break;
+                }
+            }
+        });
     }
 
     private void setWidgets(TranslationResponse translation) {

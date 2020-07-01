@@ -4,20 +4,19 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.toja.dicto.MainActivity;
 import com.example.toja.dicto.R;
 import com.example.toja.dicto.models.TranslationResponse;
-import com.example.toja.dicto.ui.main.translation.TranslationRecyclerAdapter;
+import com.example.toja.dicto.ui.main.SharedViewModel;
+import com.example.toja.dicto.ui.main.translation.TranslationFragment;
+import com.example.toja.dicto.ui.main.translation.TranslationViewModel;
 import com.example.toja.dicto.utils.VerticalSpaceItemDecoration;
 import com.example.toja.dicto.viewmodels.ViewModelProviderFactory;
 
@@ -33,6 +32,8 @@ public class HistoryFragment extends DaggerFragment {
     private static final String TAG = "HistoryFragment";
 
     private HistoryViewModel historyViewModel;
+
+    private SharedViewModel sharedViewModel;
 
     @Inject
     ViewModelProviderFactory viewModelProviderFactory;
@@ -54,6 +55,11 @@ public class HistoryFragment extends DaggerFragment {
         RecyclerView.ViewHolder viewHolder = (RecyclerView.ViewHolder) view.getTag();
         int position = viewHolder.getAdapterPosition();
         TranslationResponse translationResponse = translationResponseList.get(position);
+        sharedViewModel.selectTranslationItem(translationResponse);
+        sharedViewModel.setTranslationStateFromHistory();
+        getParentFragmentManager().beginTransaction()
+                .replace(R.id.main_container, new TranslationFragment())
+                .commit();
         Toast.makeText(getActivity(), "You clicked: " + translationResponse.getWord(), Toast.LENGTH_SHORT).show();
     };
 
@@ -68,6 +74,7 @@ public class HistoryFragment extends DaggerFragment {
         mHistoryRecyclerView = view.findViewById(R.id.history_recycler_view);
 
         historyViewModel = new ViewModelProvider(this,viewModelProviderFactory).get(HistoryViewModel.class);
+        sharedViewModel = new ViewModelProvider(getActivity(),viewModelProviderFactory).get(SharedViewModel.class);
 
         translationResponseList = new ArrayList<>();
 
@@ -75,13 +82,14 @@ public class HistoryFragment extends DaggerFragment {
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
         subscribeObservers();
     }
 
     public void subscribeObservers() {
-        historyViewModel.observeTranslations().observe(this,translations -> {
+        historyViewModel.observeTranslations().removeObservers(getViewLifecycleOwner());
+        historyViewModel.observeTranslations().observe(getViewLifecycleOwner(),translations -> {
             historyRecyclerAdapter.setTranslationResponseList(translations);
             translationResponseList = translations;
         });
