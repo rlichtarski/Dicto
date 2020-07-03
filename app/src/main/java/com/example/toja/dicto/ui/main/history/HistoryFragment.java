@@ -45,9 +45,6 @@ public class HistoryFragment extends DaggerFragment {
     @Inject
     VerticalSpaceItemDecoration verticalSpaceItemDecoration;
 
-    @Inject
-    LinearLayoutManager linearLayoutManager;
-
     private RecyclerView mHistoryRecyclerView;
 
     private List<TranslationResponse> translationResponseList;
@@ -96,7 +93,7 @@ public class HistoryFragment extends DaggerFragment {
 
     private void initHistoryRecyclerView() {
         mHistoryRecyclerView.addItemDecoration(verticalSpaceItemDecoration);
-        mHistoryRecyclerView.setLayoutManager(linearLayoutManager);
+        mHistoryRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mHistoryRecyclerView.setAdapter(historyRecyclerAdapter);
         historyRecyclerAdapter.setOnItemClickListener(onItemClickListener);
     }

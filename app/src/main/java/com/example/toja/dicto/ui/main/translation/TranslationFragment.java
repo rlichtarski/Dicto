@@ -1,5 +1,7 @@
 package com.example.toja.dicto.ui.main.translation;
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,6 +18,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.toja.dicto.MainActivity;
 import com.example.toja.dicto.R;
 import com.example.toja.dicto.models.TranslationResponse;
 import com.example.toja.dicto.ui.main.SharedViewModel;
@@ -35,6 +38,8 @@ import io.reactivex.schedulers.Schedulers;
 public class TranslationFragment extends DaggerFragment {
 
     private static final String TAG = "TranslationFragment";
+
+    protected MainActivity mMainActivity;
 
     private CompositeDisposable disposables = new CompositeDisposable();
 
@@ -105,10 +110,10 @@ public class TranslationFragment extends DaggerFragment {
     }
 
     private void subscribeSharedViewModel() {
-        sharedViewModel.getTranslationState().observe(getActivity(),translationState -> {
+        sharedViewModel.getTranslationState().observe(getViewLifecycleOwner(),translationState -> {
             switch (translationState) {
                 case FROM_HISTORY: {
-                    sharedViewModel.getSelectedTranslationItem().observe(getActivity(),this::setWidgets);
+                    sharedViewModel.getSelectedTranslationItem().observe(getViewLifecycleOwner(),this::setWidgets);
                     break;
                 }
 
