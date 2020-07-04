@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
+import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 
@@ -43,15 +44,26 @@ public class MainActivity extends DaggerAppCompatActivity implements NavigationV
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        
         switch(item.getItemId()){
 
             case R.id.nav_translate: {
-                Navigation.findNavController(this, R.id.nav_host_fragment).navigate(R.id.translationScreen);
+                NavOptions navOptions = new NavOptions.Builder()
+                        .setPopUpTo(R.id.main, true)
+                        .build();
+
+                Navigation.findNavController(this, R.id.nav_host_fragment)
+                        .navigate(R.id.translationScreen,
+                                null,
+                                navOptions
+                        );
                 break;
             }
 
             case R.id.nav_history: {
-                Navigation.findNavController(this, R.id.nav_host_fragment).navigate(R.id.historyScreen);
+                if(isValidDestination(R.id.historyScreen)){
+                    Navigation.findNavController(this, R.id.nav_host_fragment).navigate(R.id.historyScreen);
+                }
                 break;
             }
         }
@@ -59,6 +71,10 @@ public class MainActivity extends DaggerAppCompatActivity implements NavigationV
         drawerLayout.closeDrawer(GravityCompat.START);
 
         return true;
+    }
+
+    public boolean isValidDestination(int destination){
+        return destination != Navigation.findNavController(this, R.id.nav_host_fragment).getCurrentDestination().getId();
     }
 
     @Override
