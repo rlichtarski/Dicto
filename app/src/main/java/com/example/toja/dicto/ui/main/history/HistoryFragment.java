@@ -86,8 +86,8 @@ public class HistoryFragment extends DaggerFragment {
     public void subscribeObservers() {
         historyViewModel.observeTranslations().removeObservers(getViewLifecycleOwner());
         historyViewModel.observeTranslations().observe(getViewLifecycleOwner(),translations -> {
-            historyRecyclerAdapter.setTranslationResponseList(translations);
             translationResponseList = translations;
+            historyRecyclerAdapter.setTranslationResponseList(translations);
         });
     }
 

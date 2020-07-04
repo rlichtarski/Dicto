@@ -1,6 +1,5 @@
 package com.example.toja.dicto.ui.main.translation;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,7 +12,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -26,8 +24,6 @@ import com.example.toja.dicto.utils.Resource;
 import com.example.toja.dicto.utils.VerticalSpaceItemDecoration;
 import com.example.toja.dicto.viewmodels.ViewModelProviderFactory;
 
-import org.jetbrains.annotations.NotNull;
-
 import javax.inject.Inject;
 
 import dagger.android.support.DaggerFragment;
@@ -39,7 +35,7 @@ public class TranslationFragment extends DaggerFragment {
 
     private static final String TAG = "TranslationFragment";
 
-    protected MainActivity mMainActivity;
+    //protected MainActivity mMainActivity;
 
     private CompositeDisposable disposables = new CompositeDisposable();
 
@@ -59,6 +55,8 @@ public class TranslationFragment extends DaggerFragment {
     private SearchView mSearchView;
     private TextView mWordTxtView;
     private RecyclerView mTranslationRecyclerView;
+
+    private boolean isFromHistory = false;
 
     @Nullable
     @Override
@@ -104,6 +102,7 @@ public class TranslationFragment extends DaggerFragment {
                 for (int i = 0; i < translationResponseResource.data.getTranslations().size(); i++) {
                     Log.d(TAG,"showResults: SUCCESS: " + translationResponseResource.data.getTranslations().get(i).getDefinition() + ", " + translationResponseResource.message);
                 }
+                sharedViewModel.selectTranslationItem(translationResponseResource.data);
                 setWidgets(translationResponseResource.data);
             }
         }
@@ -114,11 +113,12 @@ public class TranslationFragment extends DaggerFragment {
             switch (translationState) {
                 case FROM_HISTORY: {
                     sharedViewModel.getSelectedTranslationItem().observe(getViewLifecycleOwner(),this::setWidgets);
+                    isFromHistory = true;
                     break;
                 }
 
-                default: {
-                    //nothing
+                case FROM_MAIN: {
+                    isFromHistory = false;
                     break;
                 }
             }
@@ -126,8 +126,16 @@ public class TranslationFragment extends DaggerFragment {
     }
 
     private void setWidgets(TranslationResponse translation) {
-        mWordTxtView.setText(translation.getWord());
-        translationRecyclerAdapter.setTranslationList(translation.getTranslations());
+        if(translation != null) {
+            if(translation.getWord() != null && translation.getTranslations() != null) {
+                mWordTxtView.setText(translation.getWord());
+                translationRecyclerAdapter.setTranslationList(translation.getTranslations());
+            } else {
+                mWordTxtView.setText(R.string.translation_error);
+                Toast.makeText(getContext(),R.string.translation_error,Toast.LENGTH_SHORT).show();
+            }
+
+        }
     }
 
     private void initTranslationRecyclerView() {
@@ -149,6 +157,14 @@ public class TranslationFragment extends DaggerFragment {
                 return false;
             }
         });
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if(isFromHistory) {
+            sharedViewModel.selectTranslationItem(null);
+        }
     }
 
     @Override
