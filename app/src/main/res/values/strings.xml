@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Dicto</string>
-    <string name="search">Search...</string>
+    <string name="search">Search…</string>
     <string name="search_history_upper_case">SEARCH HISTORY</string>
     <string name="search_history_lower_case">Search history</string>
     <string name="translate">Translate</string>

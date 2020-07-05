@@ -1,17 +1,24 @@
 package com.example.toja.dicto.ui.main.translation;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AutoCompleteTextView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
+import androidx.core.view.MenuItemCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -36,8 +43,6 @@ public class TranslationFragment extends DaggerFragment {
 
     private static final String TAG = "TranslationFragment";
 
-    //protected MainActivity mMainActivity;
-
     private CompositeDisposable disposables = new CompositeDisposable();
 
     @Inject
@@ -53,11 +58,16 @@ public class TranslationFragment extends DaggerFragment {
     @Inject
     VerticalSpaceItemDecoration verticalSpaceItemDecoration;
 
-    private SearchView mSearchView;
     private TextView mWordTxtView;
     private RecyclerView mTranslationRecyclerView;
 
     private boolean isFromHistory = false;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
 
     @Nullable
     @Override
@@ -69,14 +79,12 @@ public class TranslationFragment extends DaggerFragment {
     public void onViewCreated(@NonNull View view,@Nullable Bundle savedInstanceState) {
         mTranslationRecyclerView = view.findViewById(R.id.translation_recycler_view);
         mWordTxtView = view.findViewById(R.id.word_txt_view);
-        mSearchView = view.findViewById(R.id.search_view);
 
         translationViewModel = new ViewModelProvider(this,viewModelProviderFactory).get(TranslationViewModel.class);
         sharedViewModel = new ViewModelProvider(getActivity(),viewModelProviderFactory).get(SharedViewModel.class);
 
         subscribeSharedViewModel();
         initTranslationRecyclerView();
-        initSearchView();
     }
 
     private void fetchData(String word) {
@@ -97,14 +105,12 @@ public class TranslationFragment extends DaggerFragment {
             case ERROR: {
                 Log.e(TAG,"showResults ERROR message: " + translationResponseResource.message);
                 mWordTxtView.setText(getString(R.string.word_not_found));
+                translationRecyclerAdapter.clearTranslationList();
                 Toast.makeText(getContext(),getString(R.string.word_not_found),Toast.LENGTH_SHORT).show();
                 break;
             }
 
             case SUCCESS: {
-                for (int i = 0; i < translationResponseResource.data.getTranslations().size(); i++) {
-                    Log.d(TAG,"showResults: SUCCESS: " + translationResponseResource.data.getTranslations().get(i).getDefinition() + ", " + translationResponseResource.message);
-                }
                 sharedViewModel.selectTranslationItem(translationResponseResource.data);
                 setWidgets(translationResponseResource.data);
             }
@@ -138,7 +144,6 @@ public class TranslationFragment extends DaggerFragment {
         } else {
             translationRecyclerAdapter.clearTranslationList();
             mWordTxtView.setText("");
-            mSearchView.setQuery("", false);
         }
     }
 
@@ -148,12 +153,24 @@ public class TranslationFragment extends DaggerFragment {
         mTranslationRecyclerView.setAdapter(translationRecyclerAdapter);
     }
 
-    private void initSearchView() {
-        mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu,@NonNull MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu,inflater);
+        menu.clear();
+        inflater.inflate(R.menu.search_menu, menu);
+
+        MenuItem item = menu.findItem(R.id.action_search);
+        SearchView searchView = new SearchView(((MainActivity) getActivity()).getSupportActionBar().getThemedContext());
+
+        item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        item.setActionView(searchView);
+        searchView.onActionViewExpanded();
+        searchView.clearFocus();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 fetchData(query);
-                mSearchView.clearFocus();
+                searchView.clearFocus();
                 return false;
             }
 
@@ -163,6 +180,8 @@ public class TranslationFragment extends DaggerFragment {
             }
         });
     }
+
+    
 
     @Override
     public void onDestroyView() {
