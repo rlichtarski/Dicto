@@ -12,6 +12,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -95,6 +96,8 @@ public class TranslationFragment extends DaggerFragment {
 
             case ERROR: {
                 Log.e(TAG,"showResults ERROR message: " + translationResponseResource.message);
+                mWordTxtView.setText(getString(R.string.word_not_found));
+                Toast.makeText(getContext(),getString(R.string.word_not_found),Toast.LENGTH_SHORT).show();
                 break;
             }
 
@@ -114,6 +117,7 @@ public class TranslationFragment extends DaggerFragment {
                 case FROM_HISTORY: {
                     sharedViewModel.getSelectedTranslationItem().observe(getViewLifecycleOwner(),this::setWidgets);
                     isFromHistory = true;
+                    sharedViewModel.setTranslationStateMain();
                     break;
                 }
 
@@ -130,11 +134,11 @@ public class TranslationFragment extends DaggerFragment {
             if(translation.getWord() != null && translation.getTranslations() != null) {
                 mWordTxtView.setText(translation.getWord());
                 translationRecyclerAdapter.setTranslationList(translation.getTranslations());
-            } else {
-                mWordTxtView.setText(R.string.translation_error);
-                Toast.makeText(getContext(),R.string.translation_error,Toast.LENGTH_SHORT).show();
             }
-
+        } else {
+            translationRecyclerAdapter.clearTranslationList();
+            mWordTxtView.setText("");
+            mSearchView.setQuery("", false);
         }
     }
 
@@ -149,6 +153,7 @@ public class TranslationFragment extends DaggerFragment {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 fetchData(query);
+                mSearchView.clearFocus();
                 return false;
             }
 

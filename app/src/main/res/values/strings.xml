@@ -5,4 +5,5 @@
     <string name="search_history_lower_case">Search history</string>
     <string name="translate">Translate</string>
     <string name="translation_error">ERROR - translation not found</string>
+    <string name="word_not_found">Word not found</string>
 </resources>

@@ -44,4 +44,12 @@ public class TranslationRecyclerAdapter extends RecyclerView.Adapter<RecyclerVie
         }
     }
 
+    public void clearTranslationList() {
+        if(translationList != null) {
+            int translationSize = translationList.size();
+            translationList.clear();
+            notifyItemRangeRemoved(0, translationSize);
+        }
+    }
+
 }
