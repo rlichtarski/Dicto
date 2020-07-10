@@ -37,6 +37,7 @@ import javax.inject.Inject;
 import dagger.android.support.DaggerFragment;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 public class TranslationFragment extends DaggerFragment {
@@ -92,7 +93,7 @@ public class TranslationFragment extends DaggerFragment {
                 .distinct()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::showResults));
+                .subscribe(this::showResults,throwable ->  Log.e(TAG, "ERROR")));
     }
 
     private void showResults(Resource<TranslationResponse> translationResponseResource) {
@@ -142,8 +143,8 @@ public class TranslationFragment extends DaggerFragment {
                 translationRecyclerAdapter.setTranslationList(translation.getTranslations());
             }
         } else {
-            translationRecyclerAdapter.clearTranslationList();
             mWordTxtView.setText("");
+            translationRecyclerAdapter.clearTranslationList();
         }
     }
 

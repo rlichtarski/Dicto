@@ -53,7 +53,13 @@ public class TranslationRepository {
 
             @Override
             protected Single<TranslationResponse> loadFromDb() {
-                return translationsDao.getTranslationsForWord(word);
+                StringBuilder wordBuilder = new StringBuilder();
+
+                if(word.endsWith("s")) {
+                    wordBuilder = wordBuilder.append(word.substring(0, word.length()-1));
+                }
+
+                return translationsDao.getTranslationsForWord(word.toLowerCase(), String.valueOf(wordBuilder));
             }
         });
     }

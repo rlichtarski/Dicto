@@ -28,7 +28,7 @@ public interface TranslationsDao {
     @Query("SELECT * FROM translations")
     LiveData<List<TranslationResponse>> getAllTranslations();
 
-    @Query("SELECT * FROM translations WHERE word = :word")
-    Single<TranslationResponse> getTranslationsForWord(String word);
+    @Query("SELECT * FROM translations WHERE word = :word OR word = :refactoredWord")
+    Single<TranslationResponse> getTranslationsForWord(String word, String refactoredWord);
 
 }
