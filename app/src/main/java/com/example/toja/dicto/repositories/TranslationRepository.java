@@ -55,7 +55,9 @@ public class TranslationRepository {
             protected Single<TranslationResponse> loadFromDb() {
                 StringBuilder wordBuilder = new StringBuilder();
 
-                if(word.endsWith("s")) {
+                if(word.endsWith("ed")) {
+                    wordBuilder = wordBuilder.append(word.substring(0, word.length()-2));
+                } else if(word.endsWith("s")) {
                     wordBuilder = wordBuilder.append(word.substring(0, word.length()-1));
                 }
 
