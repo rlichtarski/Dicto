@@ -6,4 +6,8 @@
     <string name="translate">Translate</string>
     <string name="translation_error">ERROR - translation not found</string>
     <string name="word_not_found">Word not found</string>
+    <string name="delete">Delete</string>
+    <string name="delete_clicked">delete clicked</string>
+    <string name="discard">Discard</string>
+    <string name="discard_clicked">discard clicked</string>
 </resources>

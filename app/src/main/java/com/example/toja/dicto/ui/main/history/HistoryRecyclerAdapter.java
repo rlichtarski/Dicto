@@ -47,4 +47,8 @@ public class HistoryRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         HistoryViewHolder.setOnItemClickListener(itemClickListener);
     }
 
+    public void setOnItemLongClickListener(View.OnLongClickListener itemLongClickListener) {
+        HistoryViewHolder.setOnItemLongClickListener(itemLongClickListener);
+    }
+
 }

@@ -1,6 +1,8 @@
 package com.example.toja.dicto.ui.main.history;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +10,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -56,7 +59,27 @@ public class HistoryFragment extends DaggerFragment {
         sharedViewModel.selectTranslationItem(translationResponse);
         sharedViewModel.setTranslationStateFromHistory();
         Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.translationScreen);
-        Toast.makeText(getActivity(), "You clicked: " + translationResponse.getWord(), Toast.LENGTH_SHORT).show();
+    };
+
+    private View.OnLongClickListener onItemLongClickListener = view -> {
+        RecyclerView.ViewHolder viewHolder = (RecyclerView.ViewHolder) view.getTag();
+        int position = viewHolder.getAdapterPosition();
+        TranslationResponse translationResponse = translationResponseList.get(position);
+        String word = translationResponse.getWord();
+
+        new AlertDialog.Builder(getContext())
+                .setMessage("Delete the word '" + word + "'?")
+                .setPositiveButton(R.string.delete,(dialogInterface,i) -> {
+                    //delete the word
+                    Toast.makeText(getContext(),R.string.delete_clicked,Toast.LENGTH_SHORT).show();
+                })
+                .setNegativeButton(R.string.discard,(dialogInterface,i) -> {
+                    //discard deleting the word
+                    Toast.makeText(getContext(),R.string.discard_clicked,Toast.LENGTH_LONG).show();
+                })
+                .show();
+
+        return false;
     };
 
     @Nullable
@@ -96,6 +119,7 @@ public class HistoryFragment extends DaggerFragment {
         mHistoryRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mHistoryRecyclerView.setAdapter(historyRecyclerAdapter);
         historyRecyclerAdapter.setOnItemClickListener(onItemClickListener);
+        historyRecyclerAdapter.setOnItemLongClickListener(onItemLongClickListener);
     }
 
 }

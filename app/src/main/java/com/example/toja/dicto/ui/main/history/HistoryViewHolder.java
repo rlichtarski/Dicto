@@ -12,6 +12,7 @@ import com.example.toja.dicto.models.TranslationResponse;
 public class HistoryViewHolder extends RecyclerView.ViewHolder {
 
     private static View.OnClickListener mOnItemClickListener;
+    private static View.OnLongClickListener mOnItemLongClickListener;
 
     TextView historyWord;
 
@@ -22,6 +23,7 @@ public class HistoryViewHolder extends RecyclerView.ViewHolder {
 
         itemView.setTag(this);
         itemView.setOnClickListener(mOnItemClickListener);
+        itemView.setOnLongClickListener(mOnItemLongClickListener);
     }
 
     public void onBind(TranslationResponse translationResponse) {
@@ -30,5 +32,9 @@ public class HistoryViewHolder extends RecyclerView.ViewHolder {
 
     public static void setOnItemClickListener(View.OnClickListener itemClickListener) {
         mOnItemClickListener = itemClickListener;
+    }
+
+    public static void setOnItemLongClickListener(View.OnLongClickListener itemLongClickListener) {
+        mOnItemLongClickListener = itemLongClickListener;
     }
 }
