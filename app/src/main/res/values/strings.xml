@@ -10,5 +10,8 @@
     <string name="delete_clicked">delete clicked</string>
     <string name="discard">Discard</string>
     <string name="discard_clicked">discard clicked</string>
-    <string name="long_press_to_delete">Long press a word to delete</string>
+    <string name="long_press_to_delete">Long press to delete</string>
+    <string name="delete_word_q">Delete the word \'%s\'?</string>
+    <string name="word_deleted_info">\'%s\' deleted</string>
+
 </resources>
