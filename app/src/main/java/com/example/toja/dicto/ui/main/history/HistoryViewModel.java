@@ -28,4 +28,8 @@ public class HistoryViewModel extends ViewModel {
     public LiveData<List<TranslationResponse>> observeTranslations() {
         return translationRepository.getAllTranslations();
     }
+
+    public void deleteTranslation(int  wordId) {
+        translationRepository.deleteTranslation(wordId);
+    }
 }

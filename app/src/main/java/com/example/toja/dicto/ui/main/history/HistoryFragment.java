@@ -66,20 +66,20 @@ public class HistoryFragment extends DaggerFragment {
         int position = viewHolder.getAdapterPosition();
         TranslationResponse translationResponse = translationResponseList.get(position);
         String word = translationResponse.getWord();
+        int wordId = translationResponse.getWordId();
 
         new AlertDialog.Builder(getContext())
                 .setMessage("Delete the word '" + word + "'?")
                 .setPositiveButton(R.string.delete,(dialogInterface,i) -> {
-                    //delete the word
-                    Toast.makeText(getContext(),R.string.delete_clicked,Toast.LENGTH_SHORT).show();
+                    historyViewModel.deleteTranslation(wordId);
+                    historyRecyclerAdapter.notifyDataSetChanged();
+                    Toast.makeText(getContext(), word + " deleted",Toast.LENGTH_SHORT).show();
                 })
                 .setNegativeButton(R.string.discard,(dialogInterface,i) -> {
-                    //discard deleting the word
-                    Toast.makeText(getContext(),R.string.discard_clicked,Toast.LENGTH_LONG).show();
+                    //do nothing
                 })
                 .show();
-
-        return false;
+        return true;
     };
 
     @Nullable

@@ -2,6 +2,7 @@ package com.example.toja.dicto.persistance;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
+import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 
@@ -22,8 +23,8 @@ public interface TranslationsDao {
     @Insert(onConflict = IGNORE)
     Completable insertTranslationResponse(TranslationResponse translationResponse) throws Exception;
 
-    @Query("DELETE FROM translations WHERE word = :word")
-    Single<Integer> deleteTranslation(String word) throws Exception;
+    @Query("DELETE FROM translations WHERE word_id = :wordId")
+    Completable deleteTranslation(int wordId); //Single<Integer> instead of void for testing
 
     @Query("SELECT * FROM translations")
     LiveData<List<TranslationResponse>> getAllTranslations();
