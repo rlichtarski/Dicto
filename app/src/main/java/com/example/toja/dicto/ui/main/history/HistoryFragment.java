@@ -1,11 +1,10 @@
 package com.example.toja.dicto.ui.main.history;
 
-import android.content.DialogInterface;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -19,8 +18,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.toja.dicto.R;
 import com.example.toja.dicto.models.TranslationResponse;
 import com.example.toja.dicto.ui.main.SharedViewModel;
-import com.example.toja.dicto.ui.main.translation.TranslationFragment;
-import com.example.toja.dicto.ui.main.translation.TranslationViewModel;
 import com.example.toja.dicto.utils.VerticalSpaceItemDecoration;
 import com.example.toja.dicto.viewmodels.ViewModelProviderFactory;
 
@@ -50,6 +47,8 @@ public class HistoryFragment extends DaggerFragment {
 
     private RecyclerView mHistoryRecyclerView;
 
+    private TextView mLongPressDeleteInfo;
+
     private List<TranslationResponse> translationResponseList;
 
     private View.OnClickListener onItemClickListener = view -> {
@@ -73,7 +72,7 @@ public class HistoryFragment extends DaggerFragment {
                 .setPositiveButton(R.string.delete,(dialogInterface,i) -> {
                     historyViewModel.deleteTranslation(wordId);
                     historyRecyclerAdapter.notifyDataSetChanged();
-                    Toast.makeText(getContext(), word + " deleted",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "'" + word + "' deleted",Toast.LENGTH_SHORT).show();
                 })
                 .setNegativeButton(R.string.discard,(dialogInterface,i) -> {
                     //do nothing
@@ -91,6 +90,7 @@ public class HistoryFragment extends DaggerFragment {
     @Override
     public void onViewCreated(@NonNull View view,@Nullable Bundle savedInstanceState) {
         mHistoryRecyclerView = view.findViewById(R.id.history_recycler_view);
+        mLongPressDeleteInfo = view.findViewById(R.id.long_press_delete_info);
 
         historyViewModel = new ViewModelProvider(this,viewModelProviderFactory).get(HistoryViewModel.class);
         sharedViewModel = new ViewModelProvider(getActivity(),viewModelProviderFactory).get(SharedViewModel.class);
@@ -111,6 +111,10 @@ public class HistoryFragment extends DaggerFragment {
         historyViewModel.observeTranslations().observe(getViewLifecycleOwner(),translations -> {
             translationResponseList = translations;
             historyRecyclerAdapter.setTranslationResponseList(translations);
+            if(translationResponseList.size() > 0) {
+                mLongPressDeleteInfo.setVisibility(View.VISIBLE);
+            } else {
+                mLongPressDeleteInfo.setVisibility(View.GONE);            }
         });
     }
 
