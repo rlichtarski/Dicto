@@ -52,7 +52,7 @@ public class TranslationFragment extends DaggerFragment {
     @Inject
     VerticalSpaceItemDecoration verticalSpaceItemDecoration;
 
-    private TextView mWordTxtView;
+    private TextView mWordTxtView, mPronunciationTextView;
     private RecyclerView mTranslationRecyclerView;
 
     private MenuItem item;
@@ -76,6 +76,7 @@ public class TranslationFragment extends DaggerFragment {
     public void onViewCreated(@NonNull View view,@Nullable Bundle savedInstanceState) {
         mTranslationRecyclerView = view.findViewById(R.id.translation_recycler_view);
         mWordTxtView = view.findViewById(R.id.word_txt_view);
+        mPronunciationTextView = view.findViewById(R.id.pronunciation_txt_view);
 
         translationViewModel = new ViewModelProvider(this,viewModelProviderFactory).get(TranslationViewModel.class);
         sharedViewModel = new ViewModelProvider(getActivity(),viewModelProviderFactory).get(SharedViewModel.class);
@@ -136,6 +137,7 @@ public class TranslationFragment extends DaggerFragment {
         if(translation != null) {
             if(translation.getWord() != null && translation.getTranslations() != null) {
                 mWordTxtView.setText(translation.getWord());
+                mPronunciationTextView.setText(translation.getPronunciation().getPronunciation());
                 translationRecyclerAdapter.setTranslationList(translation.getTranslations());
             }
         } else {
