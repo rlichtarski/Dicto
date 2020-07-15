@@ -4,7 +4,6 @@ import androidx.room.Database;
 import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 
-import com.example.toja.dicto.models.Translation;
 import com.example.toja.dicto.models.TranslationResponse;
 
 @Database(entities = {TranslationResponse.class}, version = 1)

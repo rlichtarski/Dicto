@@ -11,8 +11,6 @@ import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 
-import com.example.toja.dicto.ui.main.history.HistoryFragment;
-import com.example.toja.dicto.ui.main.translation.TranslationFragment;
 import com.google.android.material.navigation.NavigationView;
 
 import dagger.android.support.DaggerAppCompatActivity;

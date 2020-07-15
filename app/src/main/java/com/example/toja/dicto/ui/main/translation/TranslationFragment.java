@@ -55,6 +55,9 @@ public class TranslationFragment extends DaggerFragment {
     private TextView mWordTxtView;
     private RecyclerView mTranslationRecyclerView;
 
+    private MenuItem item;
+    private SearchView searchView;
+
     private boolean isFromHistory = false;
 
     @Override
@@ -153,9 +156,13 @@ public class TranslationFragment extends DaggerFragment {
         menu.clear();
         inflater.inflate(R.menu.search_menu, menu);
 
-        MenuItem item = menu.findItem(R.id.action_search);
-        SearchView searchView = new SearchView(((MainActivity) getActivity()).getSupportActionBar().getThemedContext());
+        item = menu.findItem(R.id.action_search);
+        searchView = new SearchView(((MainActivity) getActivity()).getSupportActionBar().getThemedContext());
 
+        initSearchView();
+    }
+
+    private void initSearchView() {
         item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
         item.setActionView(searchView);
         searchView.onActionViewExpanded();
@@ -174,8 +181,6 @@ public class TranslationFragment extends DaggerFragment {
             }
         });
     }
-
-    
 
     @Override
     public void onDestroyView() {

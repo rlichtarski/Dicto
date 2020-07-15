@@ -2,17 +2,14 @@ package com.example.toja.dicto.persistance;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
-import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 
-import com.example.toja.dicto.models.Translation;
 import com.example.toja.dicto.models.TranslationResponse;
 
 import java.util.List;
 
 import io.reactivex.Completable;
-import io.reactivex.Flowable;
 import io.reactivex.Single;
 
 import static androidx.room.OnConflictStrategy.IGNORE;

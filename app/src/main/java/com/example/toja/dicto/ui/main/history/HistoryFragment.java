@@ -67,17 +67,7 @@ public class HistoryFragment extends DaggerFragment {
         String word = translationResponse.getWord();
         int wordId = translationResponse.getWordId();
 
-        new AlertDialog.Builder(getContext())
-                .setMessage(getString(R.string.delete_word_q, word))
-                .setPositiveButton(R.string.delete,(dialogInterface,i) -> {
-                    historyViewModel.deleteTranslation(wordId);
-                    historyRecyclerAdapter.notifyDataSetChanged();
-                    Toast.makeText(getContext(), getString(R.string.word_deleted_info, word),Toast.LENGTH_SHORT).show();
-                })
-                .setNegativeButton(R.string.discard,(dialogInterface,i) -> {
-                    //do nothing
-                })
-                .show();
+        showDeleteDialog(word, wordId);
         return true;
     };
 
@@ -124,6 +114,20 @@ public class HistoryFragment extends DaggerFragment {
         mHistoryRecyclerView.setAdapter(historyRecyclerAdapter);
         historyRecyclerAdapter.setOnItemClickListener(onItemClickListener);
         historyRecyclerAdapter.setOnItemLongClickListener(onItemLongClickListener);
+    }
+
+    private void showDeleteDialog(String word,int wordId) {
+        new AlertDialog.Builder(getContext())
+                .setMessage(getString(R.string.delete_word_q, word))
+                .setPositiveButton(R.string.delete,(dialogInterface,i) -> {
+                    historyViewModel.deleteTranslation(wordId);
+                    historyRecyclerAdapter.notifyDataSetChanged();
+                    Toast.makeText(getContext(), getString(R.string.word_deleted_info, word),Toast.LENGTH_SHORT).show();
+                })
+                .setNegativeButton(R.string.discard,(dialogInterface,i) -> {
+                    //do nothing
+                })
+                .show();
     }
 
 }

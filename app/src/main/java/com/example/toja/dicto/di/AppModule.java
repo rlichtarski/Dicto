@@ -4,10 +4,7 @@ import android.app.Application;
 
 import androidx.room.Room;
 
-import com.example.toja.dicto.network.WordsApi;
 import com.example.toja.dicto.persistance.TranslationDatabase;
-import com.example.toja.dicto.persistance.TranslationsDao;
-import com.example.toja.dicto.repositories.TranslationRepository;
 import com.example.toja.dicto.utils.Keys;
 
 import javax.inject.Singleton;

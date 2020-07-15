@@ -29,7 +29,7 @@ public class HistoryViewModel extends ViewModel {
         return translationRepository.getAllTranslations();
     }
 
-    public void deleteTranslation(int  wordId) {
+    public void deleteTranslation(int wordId) {
         translationRepository.deleteTranslation(wordId);
     }
 }

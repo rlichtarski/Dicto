@@ -9,17 +9,9 @@ public class Pronunciation {
     @Expose
     private String pronunciation;
 
-    /**
-     * No args constructor for use in serialization
-     *
-     */
     public Pronunciation() {
     }
 
-    /**
-     *
-     * @param pronunciation
-     */
     public Pronunciation(String pronunciation) {
         super();
         this.pronunciation = pronunciation;
