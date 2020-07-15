@@ -3,9 +3,11 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_translate"
+            android:icon="@drawable/baseline_translate_black_18"
             android:title="@string/translate" />
         <item
             android:id="@+id/nav_history"
+            android:icon="@drawable/baseline_history_black_18"
             android:title="@string/search_history_lower_case" />
     </group>
 </menu>
